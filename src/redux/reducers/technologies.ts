@@ -14,6 +14,9 @@ export interface TechnologyType {
     row: number,
     column: number,
     status: TechnologyStatus,
+    techUnlocks?: string[],
+    buildingUnlocks?: string[],
+    requiredTechs?: number,
 }
 
 export interface TechnologiesState {
@@ -22,13 +25,13 @@ export interface TechnologiesState {
 
 const initialState: TechnologiesState = {
     Pottery: {
-        name: 'Pottery', cost: 50, row: 4, column: 1, status: TechnologyStatus.CanBeUnlocked,
+        name: 'Pottery', cost: 50, row: 4, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Writing', 'Irrigation'], buildingUnlocks: ['Granary'],
     },
     'Animal Husbandry': {
-        name: 'Animal Husbandry', cost: 50, row: 5, column: 1, status: TechnologyStatus.CanBeUnlocked,
+        name: 'Animal Husbandry', cost: 50, row: 5, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Archery'],
     },
     Mining: {
-        name: 'Mining', cost: 50, row: 7, column: 1, status: TechnologyStatus.CanBeUnlocked,
+        name: 'Mining', cost: 50, row: 7, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Masonry', 'Bronze Working', 'Wheel'],
     },
     Sailing: {
         name: 'Sailing', cost: 50, row: 1, column: 2, status: TechnologyStatus.CanBeUnlocked,
@@ -37,22 +40,22 @@ const initialState: TechnologiesState = {
         name: 'Astrology', cost: 50, row: 2, column: 2, status: TechnologyStatus.CanBeUnlocked,
     },
     Irrigation: {
-        name: 'Irrigation', cost: 50, row: 3, column: 2, status: TechnologyStatus.Locked,
+        name: 'Irrigation', cost: 50, row: 3, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     Writing: {
-        name: 'Writing', cost: 50, row: 4, column: 2, status: TechnologyStatus.Locked,
+        name: 'Writing', cost: 50, row: 4, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     Archery: {
-        name: 'Archery', cost: 50, row: 5, column: 2, status: TechnologyStatus.Locked,
+        name: 'Archery', cost: 50, row: 5, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     Masonry: {
-        name: 'Masonry', cost: 50, row: 6, column: 3, status: TechnologyStatus.Locked,
+        name: 'Masonry', cost: 50, row: 6, column: 3, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     'Bronze Working': {
-        name: 'Bronze Working', cost: 50, row: 7, column: 3, status: TechnologyStatus.Locked,
+        name: 'Bronze Working', cost: 50, row: 7, column: 3, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     Wheel: {
-        name: 'Wheel', cost: 50, row: 8, column: 3, status: TechnologyStatus.Locked,
+        name: 'Wheel', cost: 50, row: 8, column: 3, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
 };
 
@@ -63,6 +66,16 @@ export const technologiesSlice = createSlice({
         buyTechnology: (state, action: PayloadAction<TechnologyType>) => {
             const tech = state[action.payload.name];
             tech.status = TechnologyStatus.Unlocked;
+
+            tech.techUnlocks?.forEach((techName) => {
+                const unlockedTech = state[techName];
+
+                unlockedTech.requiredTechs! -= 1; // TODO: fix later
+
+                if (!unlockedTech.requiredTechs) {
+                    unlockedTech.status = TechnologyStatus.CanBeUnlocked;
+                }
+            });
         },
     },
 });

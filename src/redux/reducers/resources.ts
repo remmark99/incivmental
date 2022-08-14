@@ -15,7 +15,7 @@ export interface ResourcesState {
 const initialState: ResourcesState = {
     food: 0,
     production: 0,
-    science: 0,
+    science: 1000,
     culture: 0,
     money: 0,
     population: 0,

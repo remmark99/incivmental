@@ -9,11 +9,12 @@ interface Props {
     column: number,
     cost: number,
     status: TechnologyStatus,
+    unlocks: string[] | undefined,
     onClick: any,
 }
 
 function TechnologyBadge({
-    name, cost, row, column, status, onClick,
+    name, cost, row, column, status, unlocks, onClick,
 }: Props) {
     const tooltip = (
         <>
@@ -45,7 +46,7 @@ function TechnologyBadge({
                         { name }
                     </div>
                     <div className={styles.unlocks}>
-                        <img src="/granary.svg" alt="Granary building" />
+                        {unlocks && unlocks.map((unlock) => <img src={`${unlock}.svg`} alt="Granary building" />)}
                     </div>
                 </div>
             </>

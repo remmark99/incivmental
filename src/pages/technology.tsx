@@ -30,6 +30,7 @@ function Technology() {
                         row={technologies[name].row}
                         column={technologies[name].column}
                         status={technologies[name].status}
+                        unlocks={technologies[name].buildingUnlocks}
                         onClick={() => handleTechClick(technologies[name])}
                     />
                 ))}
