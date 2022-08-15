@@ -6,7 +6,9 @@ import { buyTechnology } from './technologies';
 interface BuildingInterface {
     name: string,
     cost: number,
-    isBuilt: boolean,
+    limit: number,
+    built: number,
+    buildProgress: number,
 }
 
 interface BuildingsState {
@@ -14,14 +16,23 @@ interface BuildingsState {
 }
 
 const buildings: BuildingsState = {
+    Farm: {
+        name: 'Farm',
+        cost: 20,
+        limit: Infinity,
+        built: 0,
+        buildProgress: 0,
+    },
     Granary: {
         name: 'Granary',
         cost: 50,
-        isBuilt: false,
+        limit: 1,
+        built: 0,
+        buildProgress: 0,
     },
 };
 
-const initialState: BuildingsState = {};
+const initialState: BuildingsState = { Farm: buildings.Farm };
 
 const buildingsSlice = createSlice({
     name: 'buildings',
@@ -30,13 +41,16 @@ const buildingsSlice = createSlice({
         buildBuilding: (state, action: PayloadAction<string>) => {
             const building = state[action.payload];
 
-            building.isBuilt = true;
+            building.built += 1;
+            building.buildProgress = 0;
         },
-        addBuilding: (state, action: PayloadAction<BuildingInterface>) => {
-            const building = action.payload;
-
-            state[building.name] = building;
+        addBuilding: (state, action: PayloadAction<string>) => {
+            state[action.payload] = buildings[action.payload];
         },
+        setBuildProgress:
+            (state, action: PayloadAction<{ name: string, buildProgress: number }>) => {
+                state[action.payload.name].buildProgress = action.payload.buildProgress;
+            },
     },
     extraReducers(builder) {
         builder.addCase(buyTechnology, (state, action) => {
@@ -47,7 +61,7 @@ const buildingsSlice = createSlice({
     },
 });
 
-export const { buildBuilding, addBuilding } = buildingsSlice.actions;
+export const { buildBuilding, addBuilding, setBuildProgress } = buildingsSlice.actions;
 export const selectBuildings = (state: RootState) => state.buildings;
 
 export default buildingsSlice.reducer;

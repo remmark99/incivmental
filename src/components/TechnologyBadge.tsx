@@ -46,7 +46,7 @@ function TechnologyBadge({
                         { name }
                     </div>
                     <div className={styles.unlocks}>
-                        {unlocks && unlocks.map((unlock) => <img src={`${unlock}.svg`} alt="Granary building" />)}
+                        {unlocks && unlocks.map((unlock) => <img key={unlock} src={`${unlock}.svg`} alt={`${unlock} building`} />)}
                     </div>
                 </div>
             </>
