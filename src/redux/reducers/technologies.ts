@@ -31,7 +31,7 @@ const initialState: TechnologiesState = {
         name: 'Animal Husbandry', cost: 50, row: 5, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Archery'],
     },
     Mining: {
-        name: 'Mining', cost: 50, row: 7, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Masonry', 'Bronze Working', 'Wheel'],
+        name: 'Mining', cost: 50, row: 7, column: 1, status: TechnologyStatus.CanBeUnlocked, techUnlocks: ['Masonry', 'Bronze Working', 'Wheel'], buildingUnlocks: ['Mine'],
     },
     Sailing: {
         name: 'Sailing', cost: 50, row: 1, column: 2, status: TechnologyStatus.CanBeUnlocked,
@@ -43,7 +43,7 @@ const initialState: TechnologiesState = {
         name: 'Irrigation', cost: 50, row: 3, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
     },
     Writing: {
-        name: 'Writing', cost: 50, row: 4, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
+        name: 'Writing', cost: 50, row: 4, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1, buildingUnlocks: ['Library'],
     },
     Archery: {
         name: 'Archery', cost: 50, row: 5, column: 2, status: TechnologyStatus.Locked, requiredTechs: 1,
