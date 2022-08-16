@@ -4,7 +4,9 @@ import PopCard from '../components/PopCard';
 import ProgressBar from '../components/ProgressBar';
 import MainLayout from '../layouts/main';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { buildBuilding, selectBuildings, setBuildProgress } from '../redux/reducers/buildings';
+import {
+    buildBuilding, BuildingInterface, selectBuildings, setBuildProgress,
+} from '../redux/reducers/buildings';
 import { selectProduction } from '../redux/reducers/resources';
 import styles from './buildings.module.scss';
 
@@ -13,15 +15,15 @@ function Buildings() {
     const production = useAppSelector(selectProduction);
     const dispatch = useAppDispatch();
 
-    function startBuilding(buildingName: string) {
-        const { name, cost } = buildings[buildingName];
-        let { buildProgress } = buildings[buildingName];
+    function startBuilding(building: BuildingInterface) {
+        const { name, cost } = building;
+        let { buildProgress } = building;
 
         const interval = setInterval(() => {
-            if (buildProgress === cost) {
+            if (buildProgress >= cost) {
                 clearInterval(interval);
 
-                dispatch(buildBuilding(buildingName));
+                dispatch(buildBuilding(building));
 
                 return 0;
             }

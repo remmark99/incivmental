@@ -3,12 +3,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { buyTechnology } from './technologies';
 
-interface BuildingInterface {
+export interface BuildingInterface {
     name: string,
     cost: number,
     limit: number,
     built: number,
     buildProgress: number,
+    effects?: {
+        housing?: number,
+        foodProduction?: number,
+        scienceProduction?: number,
+        scientistLimit?: number,
+    }
 }
 
 interface BuildingsState {
@@ -29,6 +35,28 @@ const buildings: BuildingsState = {
         limit: 1,
         built: 0,
         buildProgress: 0,
+        effects: {
+            housing: 2,
+            foodProduction: 1,
+        },
+    },
+    Mine: {
+        name: 'Mine',
+        cost: 20,
+        limit: Infinity,
+        built: 0,
+        buildProgress: 0,
+    },
+    Library: {
+        name: 'Library',
+        cost: 20,
+        limit: 1,
+        built: 0,
+        buildProgress: 0,
+        effects: {
+            scienceProduction: 2,
+            scientistLimit: 1,
+        },
     },
 };
 
@@ -38,8 +66,9 @@ const buildingsSlice = createSlice({
     name: 'buildings',
     initialState,
     reducers: {
-        buildBuilding: (state, action: PayloadAction<string>) => {
-            const building = state[action.payload];
+        buildBuilding: (state, action: PayloadAction<BuildingInterface>) => {
+            // TODO: can we simply change building that we are being passed?
+            const building = state[action.payload.name];
 
             building.built += 1;
             building.buildProgress = 0;

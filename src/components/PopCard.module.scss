@@ -82,3 +82,13 @@
     margin-top: 5px;
     width: 100%;
 }
+
+.textField {
+    display: flex;
+    justify-content: space-between;
+    height: 30px;
+
+    button {
+        width: 30px;
+    }
+}

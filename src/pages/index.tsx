@@ -12,10 +12,16 @@ import {
     selectFarmers,
     selectPopulationFoodYield,
     selectPopProdYield,
+    increaseFarmers,
+    increaseMiners,
+    selectHousing,
+    selectMiners,
+    selectScientists,
 } from '../redux/reducers/resources';
 import MainLayout from '../layouts/main';
 import { selectHasIntervalStarted, setIntervalStarted } from '../redux/reducers/game';
 import PopCard from '../components/PopCard';
+import { selectBuildings } from '../redux/reducers/buildings';
 
 const Home: NextPage = () => {
     const food = useAppSelector(selectFood);
@@ -24,7 +30,11 @@ const Home: NextPage = () => {
     const population = useAppSelector(selectPopulation);
     const populationCost = useAppSelector(selectPopulationCost);
     const farmers = useAppSelector(selectFarmers);
+    const miners = useAppSelector(selectMiners);
+    const scientists = useAppSelector(selectScientists);
     const hasIntervalStarted = useAppSelector(selectHasIntervalStarted);
+    const housing = useAppSelector(selectHousing);
+    const { Farm, Mine } = useAppSelector(selectBuildings);
 
     const dispatch = useAppDispatch();
 
@@ -46,7 +56,7 @@ const Home: NextPage = () => {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <Grid container spacing={2}>
-                    <Grid xs={2}>
+                    <Grid xs={6} lg={4} xl={2}>
                         <PopCard
                             icon="Pop"
                             cardTitle={`Population (${population})`}
@@ -55,19 +65,44 @@ const Home: NextPage = () => {
                             progressVal={food}
                             progressMax={populationCost}
                             buttonText="TODO"
+                            onButtonClick={() => console.log('haha')}
                         />
                     </Grid>
-                    <Grid xs={2}>
+                    <Grid xs={6} lg={4} xl={2}>
                         <PopCard
                             icon="Farmer"
                             cardTitle={`Farmer (${farmers})`}
                             foodYield={3}
-                            progressVal={food}
-                            progressMax={populationCost}
                             buttonText="Buy"
+                            hasTextField
+                            onButtonClick={(value: number) => dispatch(increaseFarmers(value))}
+                            max={Math.min(population, Farm ? Farm.built - farmers : 0)}
+                        />
+                    </Grid>
+                    <Grid xs={6} lg={4} xl={2}>
+                        <PopCard
+                            icon="Miner"
+                            cardTitle={`Miner (${miners})`}
+                            prodYield={3}
+                            buttonText="Buy"
+                            hasTextField
+                            onButtonClick={(value: number) => dispatch(increaseMiners(value))}
+                            max={Math.min(population, Mine ? Mine.built - miners : 0)}
+                        />
+                    </Grid>
+                    <Grid xs={6} lg={4} xl={2}>
+                        <PopCard
+                            icon="Scientist"
+                            cardTitle={`Scientist (${scientists})`}
+                            prodYield={3}
+                            buttonText="Buy"
+                            hasTextField
+                            onButtonClick={(value: number) => dispatch(increaseMiners(value))}
+                            max={Math.min(population, Mine ? Mine.built - miners : 0)}
                         />
                     </Grid>
                 </Grid>
+                <div>{housing}</div>
             </MainLayout>
         </div>
     );
