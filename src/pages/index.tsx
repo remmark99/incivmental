@@ -64,7 +64,7 @@ const Home: NextPage = () => {
                             foodYield={3}
                             progressVal={food}
                             progressMax={populationCost}
-                            buttonText="Cost: "
+                            buttonText="Buy"
                         />
                     </Grid>
                 </Grid>

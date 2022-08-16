@@ -1,4 +1,6 @@
 import React from 'react';
+import Grid from '@mui/material/Unstable_Grid2';
+import PopCard from '../components/PopCard';
 import ProgressBar from '../components/ProgressBar';
 import MainLayout from '../layouts/main';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -34,31 +36,20 @@ function Buildings() {
 
     return (
         <MainLayout>
-            {Object.keys(buildings).map((buildingName) => (
-                <button
-                    key={buildingName}
-                    onClick={startBuilding.bind(null, buildingName)}
-                    type="button"
-                    className={styles.container}
-                >
-                    <span>{buildingName}</span>
-                    <img src={`${buildingName}.svg`} alt={`${buildingName} building`} className={styles.icon} />
-                    <span>
-                        Cost:
-                        {buildings[buildingName].cost}
-                        {' '}
-                        production
-                        {' '}
-                    </span>
-                    <span className={styles.limit}>
-                        {`${buildings[buildingName].built} / ${buildings[buildingName].limit}`}
-                    </span>
-                    <ProgressBar
-                        value={buildings[buildingName].buildProgress}
-                        max={buildings[buildingName].cost}
-                    />
-                </button>
-            ))}
+            <Grid container spacing={2}>
+                {Object.keys(buildings).map((buildingName) => (
+                    <Grid xs={2}>
+                        <PopCard
+                            icon={buildingName}
+                            cardTitle={`${buildingName} (${buildings[buildingName].built})`}
+                            foodYield={3}
+                            progressVal={buildings[buildingName].buildProgress}
+                            progressMax={buildings[buildingName].cost}
+                            buttonText="Build"
+                        />
+                    </Grid>
+                ))}
+            </Grid>
         </MainLayout>
     );
 }
