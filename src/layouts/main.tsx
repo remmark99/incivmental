@@ -47,7 +47,7 @@ const MainLayout = ({ children }: any) => {
                 <Toolbar />
                 <Divider />
                 <List>
-                    {['Home', 'Technology', 'Buildings'].map((text) => (
+                    {['Home', 'Technology', 'Buildings', 'Map'].map((text) => (
                         <ListItem key={text} disablePadding>
                             <Link href={text === 'Home' ? '/' : `/${text.toLowerCase()}`}>
                                 <ListItemButton>
