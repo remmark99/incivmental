@@ -1,24 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
-import { buyTechnology } from './technologies';
-import { buildBuilding } from './buildings';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
+import { buyTechnology } from "./technologies";
+import { buildBuilding } from "./buildings";
 
 export interface ResourcesState {
-    food: number,
-    foodProduction: number,
-    production: number,
-    science: number,
-    scienceProduction: number,
-    culture: number,
-    money: number,
-    population: number,
-    populationCost: number,
-    populationFoodYield: number,
-    populationProductionYield: number,
-    housing: number,
-    farmers: number,
-    miners: number,
-    scientists: number,
+    food: number;
+    foodProduction: number;
+    production: number;
+    science: number;
+    scienceProduction: number;
+    culture: number;
+    money: number;
+    population: number;
+    populationCost: number;
+    populationFoodYield: number;
+    populationProductionYield: number;
+    housing: number;
+    farmers: number;
+    miners: number;
+    scientists: number;
 }
 
 const initialState: ResourcesState = {
@@ -51,7 +51,7 @@ const getHousingModifier = (availableHousing: number): number => {
 };
 
 export const resourcesSlice = createSlice({
-    name: 'resources',
+    name: "resources",
     initialState,
     reducers: {
         increaseFood: (state, action: PayloadAction<number>) => {
@@ -93,7 +93,8 @@ export const resourcesSlice = createSlice({
         updateResources: (state) => {
             const housingModifier = getHousingModifier(state.housing);
 
-            state.food += (state.foodProduction - state.population * 2) * housingModifier;
+            state.food +=
+                (state.foodProduction - state.population * 2) * housingModifier;
             if (state.food >= state.populationCost) {
                 state.population += 1;
                 state.food -= state.populationCost;
@@ -137,17 +138,23 @@ export const {
 } = resourcesSlice.actions;
 
 export const selectFood = (state: RootState) => state.resources.food;
-export const selectProduction = (state: RootState) => state.resources.production;
+export const selectProduction = (state: RootState) =>
+    state.resources.production;
 export const selectScience = (state: RootState) => state.resources.science;
-export const selectPopulation = (state: RootState) => state.resources.population;
-export const selectPopulationCost = (state: RootState) => state.resources.populationCost;
-export const selectPopulationFoodYield = (state: RootState) => state.resources.populationFoodYield;
-export const selectPopProdYield = (state: RootState) => state.resources.populationProductionYield;
+export const selectPopulation = (state: RootState) =>
+    state.resources.population;
+export const selectPopulationCost = (state: RootState) =>
+    state.resources.populationCost;
+export const selectPopulationFoodYield = (state: RootState) =>
+    state.resources.populationFoodYield;
+export const selectPopProdYield = (state: RootState) =>
+    state.resources.populationProductionYield;
 // TODO: why does this line above thinks it can tell me how to name my variables?!
 export const selectHousing = (state: RootState) => state.resources.housing;
 
 export const selectFarmers = (state: RootState) => state.resources.farmers;
 export const selectMiners = (state: RootState) => state.resources.miners;
-export const selectScientists = (state: RootState) => state.resources.scientists;
+export const selectScientists = (state: RootState) =>
+    state.resources.scientists;
 
 export default resourcesSlice.reducer;

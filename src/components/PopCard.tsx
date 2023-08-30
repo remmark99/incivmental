@@ -1,118 +1,118 @@
-import {
-    Avatar, Box, Button, Divider, Paper, TextField, Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
-import ProgressBar from './ProgressBar';
-import styles from './PopCard.module.scss';
-
-const defaultProps = {
-    foodYield: 0,
-    prodYield: 0,
-    progressVal: 0,
-    progressMax: 0,
-    hasTextField: false,
-    max: 0,
-};
+import { Avatar, Button, Divider, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
+import Image from "next/image";
+import ProgressBar from "./ProgressBar";
 
 interface Props {
-    icon: string,
-    cardTitle: string,
-    foodYield?: number,
-    prodYield?: number,
-    progressVal?: number,
-    progressMax?: number,
-    buttonText: string,
-    hasTextField?: boolean,
-    onButtonClick: (value: number) => void,
-    max?: number,
+    icon: string;
+    cardTitle: string;
+    foodYield?: number;
+    prodYield?: number;
+    progressVal?: number;
+    progressMax?: number;
+    buttonText: string;
+    hasTextField?: boolean;
+    onButtonClick: (value: number) => void;
+    max?: number;
 }
 
-type PopCardProps = Props & typeof defaultProps;
-
-const PopCard = (
-    {
-        icon,
-        cardTitle,
-        foodYield,
-        prodYield,
-        progressVal,
-        progressMax,
-        buttonText,
-        hasTextField,
-        onButtonClick,
-        max,
-    }: PopCardProps,
-) => {
+export default function PopCard({
+    icon,
+    cardTitle,
+    foodYield = 0,
+    prodYield = 0,
+    progressVal = 0,
+    progressMax = 0,
+    buttonText,
+    hasTextField = false,
+    onButtonClick,
+    max = 0,
+}: Props) {
     const [value, setValue] = useState(max);
 
     return (
-        <Paper className={styles.paper} elevation={1}>
-            <Box className={styles.iconBox}>
-                <Box>
+        <Paper
+            className="rounded-2xl max-w-[200px] cursor-pointer"
+            elevation={1}
+        >
+            <div className="flex justify-center p-4 mx-6">
+                <div className="grid justify-center items-center w-20 h-20 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500">
                     <Avatar
+                        variant="square"
+                        className="w-[60px] h-[60px]"
                         alt="Pop clicker"
                         src={`/${icon}.svg`}
                     />
-                </Box>
-            </Box>
-            <Box className={styles.descriptionBox}>
-                <Typography variant="h6">{cardTitle}</Typography>
-                <Typography variant="caption"><i>&quot;Your average worker Joe&quot;</i></Typography>
-                <Divider variant="fullWidth" />
-                <Typography variant="h5">
-                    {foodYield !== 0 && (
+                </div>
+            </div>
+            <div className="p-4 pt-0 text-center leading-5 text-[rgba(52,71,103,1)]">
+                <span className="font-medium block">{cardTitle}</span>
+                <span className="text-sm">
+                    <i>&quot;Your average worker Joe&quot;</i>
+                </span>
+                <Divider className="my-4 opacity-75" variant="fullWidth" />
+                <div className="flex items-center justify-center mb-2">
+                    {!!foodYield && (
                         <>
                             {foodYield}
-                            <img src="/Apple.svg" alt="Population food yield" />
-                            {' '}
+                            <Image
+                                src="/Apple.svg"
+                                alt="Population food yield"
+                                height={35}
+                                width={35}
+                            />
                         </>
                     )}
-                    {prodYield !== 0 && (
+                    {!!prodYield && (
                         <>
                             {prodYield}
-                            <img src="/Production.svg" alt="Population production yield" />
+                            <Image
+                                src="/Production.svg"
+                                alt="Population production yield"
+                                height={35}
+                                width={35}
+                            />
                         </>
                     )}
-                </Typography>
-                {
-                    hasTextField
-                        ? (
-                            <Box className={styles.textField}>
-                                <Button
-                                    onClick={() => value > 0 && setValue(value - 1)}
-                                    variant="contained"
-                                    size="small"
-                                    disabled={!value}
-                                >
-                                    -
-                                </Button>
-                                <Typography>{value}</Typography>
-                                <Button
-                                    onClick={() => setValue(value + 1)}
-                                    variant="contained"
-                                    size="small"
-                                    disabled={value >= max}
-                                >
-                                    +
-                                </Button>
-                            </Box>
-                        )
-                        : <ProgressBar value={progressVal} max={progressMax} />
-                }
+                </div>
+                {hasTextField ? (
+                    <div className="flex justify-between h-[30px]">
+                        <Button
+                            className="w-[30px]"
+                            onClick={() => value > 0 && setValue(value - 1)}
+                            variant="contained"
+                            size="small"
+                            disabled={!value}
+                        >
+                            -
+                        </Button>
+                        <Typography>{value}</Typography>
+                        <Button
+                            className="w-[30px]"
+                            onClick={() => setValue(value + 1)}
+                            variant="contained"
+                            size="small"
+                            disabled={value >= max}
+                        >
+                            +
+                        </Button>
+                    </div>
+                ) : (
+                    <ProgressBar value={progressVal} max={progressMax} />
+                )}
                 <Button
-                    className={styles.button}
+                    className="h-[30px] mt-[5px] w-full bg-[#1565c0]"
                     variant="contained"
                     size="medium"
-                    onClick={() => { onButtonClick(value); setValue(0); }}
+                    onClick={() => {
+                        onButtonClick(value);
+                        setValue(0);
+                    }}
                     disabled={!value}
                 >
                     {buttonText}
                 </Button>
-            </Box>
+            </div>
         </Paper>
     );
-};
-
-PopCard.defaultProps = defaultProps;
-
-export default PopCard;
+}

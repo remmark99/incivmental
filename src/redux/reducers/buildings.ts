@@ -1,36 +1,36 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from '../store';
-import { buyTechnology } from './technologies';
+import type { RootState } from "../store";
+import { buyTechnology } from "./technologies";
 
 export interface BuildingInterface {
-    name: string,
-    cost: number,
-    limit: number,
-    built: number,
-    buildProgress: number,
+    name: string;
+    cost: number;
+    limit: number;
+    built: number;
+    buildProgress: number;
     effects?: {
-        housing?: number,
-        foodProduction?: number,
-        scienceProduction?: number,
-        scientistLimit?: number,
-    }
+        housing?: number;
+        foodProduction?: number;
+        scienceProduction?: number;
+        scientistLimit?: number;
+    };
 }
 
 interface BuildingsState {
-    [key: string]: BuildingInterface
+    [key: string]: BuildingInterface;
 }
 
 const buildings: BuildingsState = {
     Farm: {
-        name: 'Farm',
+        name: "Farm",
         cost: 20,
         limit: Infinity,
         built: 0,
         buildProgress: 0,
     },
     Granary: {
-        name: 'Granary',
+        name: "Granary",
         cost: 50,
         limit: 1,
         built: 0,
@@ -41,14 +41,14 @@ const buildings: BuildingsState = {
         },
     },
     Mine: {
-        name: 'Mine',
+        name: "Mine",
         cost: 20,
         limit: Infinity,
         built: 0,
         buildProgress: 0,
     },
     Library: {
-        name: 'Library',
+        name: "Library",
         cost: 20,
         limit: 1,
         built: 0,
@@ -63,7 +63,7 @@ const buildings: BuildingsState = {
 const initialState: BuildingsState = { Farm: buildings.Farm };
 
 const buildingsSlice = createSlice({
-    name: 'buildings',
+    name: "buildings",
     initialState,
     reducers: {
         buildBuilding: (state, action: PayloadAction<BuildingInterface>) => {
@@ -76,10 +76,13 @@ const buildingsSlice = createSlice({
         addBuilding: (state, action: PayloadAction<string>) => {
             state[action.payload] = buildings[action.payload];
         },
-        setBuildProgress:
-            (state, action: PayloadAction<{ name: string, buildProgress: number }>) => {
-                state[action.payload.name].buildProgress = action.payload.buildProgress;
-            },
+        setBuildProgress: (
+            state,
+            action: PayloadAction<{ name: string; buildProgress: number }>,
+        ) => {
+            state[action.payload.name].buildProgress =
+                action.payload.buildProgress;
+        },
     },
     extraReducers(builder) {
         builder.addCase(buyTechnology, (state, action) => {
@@ -90,7 +93,8 @@ const buildingsSlice = createSlice({
     },
 });
 
-export const { buildBuilding, addBuilding, setBuildProgress } = buildingsSlice.actions;
+export const { buildBuilding, addBuilding, setBuildProgress } =
+    buildingsSlice.actions;
 export const selectBuildings = (state: RootState) => state.buildings;
 
 export default buildingsSlice.reducer;

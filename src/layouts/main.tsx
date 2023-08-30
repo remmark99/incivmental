@@ -1,44 +1,63 @@
-import React from 'react';
-import Link from 'next/link';
-import Drawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
+import React from "react";
+import Link from "next/link";
+import Drawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Divider from "@mui/material/Divider";
 import {
     AppBar,
     List,
     ListItem,
     ListItemButton,
     ListItemText,
-} from '@mui/material';
-import styles from './main.module.scss';
-import { useAppSelector } from '../redux/hooks';
-import { selectFood, selectProduction, selectScience } from '../redux/reducers/resources';
+} from "@mui/material";
+import Image from "next/image";
+import useResourcesStore from "@/app/store/resourcesStore";
+import styles from "./main.module.scss";
 
-const MainLayout = ({ children }: any) => {
-    const food = useAppSelector(selectFood);
-    const science = useAppSelector(selectScience);
-    const production = useAppSelector(selectProduction);
+function MainLayout({ children }: any) {
+    const { food, science, production } = useResourcesStore((state) => state);
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <AppBar position="fixed" sx={{ width: 'calc(100% - 300px)', ml: '300px' }}>
+        <Box sx={{ display: "flex" }}>
+            <AppBar
+                position="fixed"
+                sx={{ width: "calc(100% - 300px)", ml: "300px" }}
+            >
                 <Toolbar>
-                    <img src="/Apple.svg" alt="Food count" className={styles.resource} />
-                    <span>{ food.toFixed(1) }</span>
-                    <img src="/science.svg" alt="Science count" className={styles.resource} />
-                    <span>{ science.toFixed(1) }</span>
-                    <img src="/Production.svg" alt="Production count" className={styles.resource} />
-                    <span>{ production.toFixed(1) }</span>
+                    <Image
+                        src="/Apple.svg"
+                        alt="Food count"
+                        className={styles.resource}
+                        width={35}
+                        height={35}
+                    />
+                    <span>{food.toFixed(1)}</span>
+                    <Image
+                        src="/science.svg"
+                        alt="Science count"
+                        className={styles.resource}
+                        width={35}
+                        height={35}
+                    />
+                    <span>{science.toFixed(1)}</span>
+                    <Image
+                        src="/Production.svg"
+                        alt="Production count"
+                        className={styles.resource}
+                        width={35}
+                        height={35}
+                    />
+                    <span>{production.toFixed(1)}</span>
                 </Toolbar>
             </AppBar>
             <Drawer
                 sx={{
                     width: 300,
                     flexShrink: 0,
-                    '& .MuiDrawer-paper': {
+                    "& .MuiDrawer-paper": {
                         width: 300,
-                        boxSizing: 'border-box',
+                        boxSizing: "border-box",
                     },
                 }}
                 variant="permanent"
@@ -47,9 +66,15 @@ const MainLayout = ({ children }: any) => {
                 <Toolbar />
                 <Divider />
                 <List>
-                    {['Home', 'Technology', 'Buildings', 'Map'].map((text) => (
+                    {["Home", "Technology", "Buildings", "Map"].map((text) => (
                         <ListItem key={text} disablePadding>
-                            <Link href={text === 'Home' ? '/' : `/${text.toLowerCase()}`}>
+                            <Link
+                                href={
+                                    text === "Home"
+                                        ? "/"
+                                        : `/${text.toLowerCase()}`
+                                }
+                            >
                                 <ListItemButton>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -60,13 +85,13 @@ const MainLayout = ({ children }: any) => {
             </Drawer>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, bgColor: 'background.default', p: 3 }}
+                sx={{ flexGrow: 1, bgColor: "background.default", p: 3 }}
             >
                 <Toolbar />
-                { children }
+                {children}
             </Box>
         </Box>
     );
-};
+}
 
 export default MainLayout;
