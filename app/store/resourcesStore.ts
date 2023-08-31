@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { RESOURCE_CONSTANTS } from "../constants";
+import { RESOURCE_CONSTANTS, RESOURCE_GAIN_MODIFIER } from "../constants";
 
 const getHousingModifier = (availableHousing: number): number => {
     let housingModifier;
@@ -16,14 +16,15 @@ const useResourcesStore = create<ResourcesState>((set) => ({
     food: 0,
     foodProduction: RESOURCE_CONSTANTS.BASE_FOOD_PRODUCTION,
     production: RESOURCE_CONSTANTS.BASE_PROD,
-    science: 0,
+    science: 100,
     scienceProduction: 0,
     culture: 0,
     money: 0,
     population: 0,
     populationCost: 10,
-    populationFoodYield: 1,
-    populationProductionYield: 1,
+    populationFoodYield: RESOURCE_CONSTANTS.BASE_POPULATION_FOOD_YIELD,
+    populationProductionYield:
+        RESOURCE_CONSTANTS.BASE_POPULATION_PRODUCTION_YIELD,
     housing: 5,
     farmers: 0,
     miners: 0,
@@ -90,16 +91,20 @@ const useResourcesStore = create<ResourcesState>((set) => ({
             const housingModifier = getHousingModifier(newState.housing);
 
             newState.food +=
-                (newState.foodProduction - newState.population * 2) *
+                (newState.foodProduction -
+                    newState.population * 2 * RESOURCE_GAIN_MODIFIER) *
                 housingModifier;
             if (newState.food >= newState.populationCost) {
                 newState.population++;
                 newState.food -= newState.populationCost;
                 newState.populationCost *= 2;
-                newState.foodProduction++;
-                newState.production++;
+                newState.foodProduction +=
+                    RESOURCE_CONSTANTS.BASE_POPULATION_FOOD_YIELD;
+                newState.production +=
+                    RESOURCE_CONSTANTS.BASE_POPULATION_PRODUCTION_YIELD;
                 newState.housing--;
-                newState.scienceProduction += 0.5;
+                newState.scienceProduction +=
+                    RESOURCE_CONSTANTS.BASE_POPULATION_SCIENCE_YIELD;
             }
 
             // TODO: I just increased prod by 1 (look up), maybe a mistake

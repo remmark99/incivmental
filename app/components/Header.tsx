@@ -9,7 +9,7 @@ export default function Header() {
     const { food, science, production } = useResourcesStore((state) => state);
 
     return (
-        <div className="w-full h-16 bg-blue-600 px-6 flex items-center">
+        <div className="w-full min-h-[4rem] bg-blue-600 px-6 flex items-center">
             <Image src="/Apple.svg" alt="Food count" width={35} height={35} />
             <span>{food.toFixed(1)}</span>
             <Image

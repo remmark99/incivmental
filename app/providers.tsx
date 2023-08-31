@@ -12,8 +12,7 @@ export default function Providers({ children }: Props) {
     const updateResources = useResourcesStore((state) => state.updateResources);
 
     useEffect(() => {
-        console.log("what?");
-        setInterval(() => updateResources(), 1000);
+        setInterval(() => updateResources(), 100);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

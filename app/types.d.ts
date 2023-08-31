@@ -52,3 +52,37 @@ interface ResourcesState {
     increaseMiners: (minersIncrease: number) => void;
     updateResources: () => void;
 }
+
+type TechnologyStatus = 0 | 1 | 2;
+
+type TechnologyName =
+    | "Pottery"
+    | "Animal Husbandry"
+    | "Mining"
+    | "Sailing"
+    | "Astrology"
+    | "Irrigation"
+    | "Writing"
+    | "Archery"
+    | "Masonry"
+    | "Bronze Working"
+    | "Wheel";
+
+interface Technology {
+    name: string;
+    cost: number;
+    row: number;
+    column: number;
+    status: ITechnologyStatus;
+    techUnlocks?: TechnologyName[];
+    buildingUnlocks?: string[];
+    requiredTechs?: number;
+}
+
+type Technologies = Record<TechnologyName, Technology>;
+
+type ResearchState = {
+    technologies: Technologies;
+    technologiesUpdateWatcher: number;
+    buyTechnology: (technologyName: TechnologyName) => void;
+};

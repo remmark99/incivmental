@@ -10,23 +10,25 @@ import useResourcesStore from "../store/resourcesStore";
 function Buildings() {
     const { unlockedBuildings, constructBuilding, setBuildProgress } =
         useBuildingsStore((state) => state);
-    const { production } = useResourcesStore((state) => state);
+    const production = useResourcesStore((state) => state.production);
 
     const startBuilding = (buildingName: BuildingNames, building: Building) => {
         const { cost } = building;
         let { buildProgress } = building;
 
         const interval = setInterval(() => {
+            buildProgress += production;
+
             if (buildProgress >= cost) {
                 clearInterval(interval);
 
                 constructBuilding(buildingName);
+
+                return;
             }
 
-            buildProgress += production;
-
             setBuildProgress({ buildingName, buildProgress });
-        }, 1000);
+        }, 100);
     };
 
     return (
@@ -35,8 +37,8 @@ function Buildings() {
                 ([buildingName, building]) => (
                     <Grid key={buildingName} xs={2}>
                         <PopCard
-                            icon={buildingName}
-                            cardTitle={`${buildingName} (${building.built})`}
+                            icon={building.name}
+                            cardTitle={`${building.name} (${building.built})`}
                             foodYield={3}
                             progressVal={building.buildProgress}
                             progressMax={building.cost}
