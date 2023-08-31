@@ -14,6 +14,7 @@ interface Props {
     hasTextField?: boolean;
     onButtonClick: (value: number) => void;
     max?: number;
+    buttonDisabled?: boolean;
 }
 
 export default function PopCard({
@@ -27,6 +28,7 @@ export default function PopCard({
     hasTextField = false,
     onButtonClick,
     max = 0,
+    buttonDisabled = false,
 }: Props) {
     const [value, setValue] = useState(max);
 
@@ -108,7 +110,7 @@ export default function PopCard({
                         onButtonClick(value);
                         setValue(0);
                     }}
-                    disabled={!value}
+                    disabled={buttonDisabled}
                 >
                     {buttonText}
                 </Button>

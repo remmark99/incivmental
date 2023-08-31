@@ -12,11 +12,17 @@ interface Building {
     };
 }
 
-type BuildingNames = "farm" | "mine" | "granary" | "library";
+type BuildingNames = "Farm" | "Mine" | "Granary" | "Library";
 type Buildings = Partial<Record<BuildingNames, Building>>;
 
 type BuildingsState = {
     unlockedBuildings: Buildings;
+    currentlyConstructedBuilding: BuildingNames | null;
+    constructionTimeout: Timeout | null;
+    setCurrentlyConstructedBuilding: (
+        currentlyConstructedBuilding: BuildingNames,
+    ) => void;
+    setConstructionTimeout: (constructionTimeout: Timeout) => void;
     constructBuilding: (buildingName: BuildingNames) => void;
     unlockBuilding: (buildingName: BuildingNames) => void;
     setBuildProgress: ({
@@ -75,11 +81,15 @@ interface Technology {
     column: number;
     status: ITechnologyStatus;
     techUnlocks?: TechnologyName[];
-    buildingUnlocks?: string[];
+    buildingUnlocks?: BuildingNames[];
     requiredTechs?: number;
 }
 
 type Technologies = Record<TechnologyName, Technology>;
+
+type TechTreeLinks = {
+    [key in TechnologyName]: [xOffset: number, yOffset: number][];
+};
 
 type ResearchState = {
     technologies: Technologies;

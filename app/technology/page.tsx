@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import TechnologyBadge from "@/src/components/TechnologyBadge";
 import { shallow } from "zustand/shallow";
+
+import TechnologyBadge from "../components/technology/TechnologyBadge";
 import useResourcesStore from "../store/resourcesStore";
 import useResearchStore, { TechnologyStatus } from "../store/researchStore";
 import useBuildingsStore from "../store/buildingsStore";
@@ -23,8 +24,33 @@ function Technology() {
         shallow,
     );
     const unlockBuilding = useBuildingsStore((state) => state.unlockBuilding);
-    const [cheapestTechCost, setCheapestTechCost] = useState(0);
-    const [shouldRerenderBadges, setShouldRerenderBadges] = useState(0);
+    const [cheapestTechCost, setCheapestTechCost] = useState(Infinity);
+    const [shouldRerenderBadges, setShouldRerenderBadges] = useState(false);
+    const techTreeLinks = useMemo(
+        () =>
+            Object.entries(technologies).reduce(
+                (linksObj, [currTechnologyName, currTechnology]) => {
+                    linksObj[currTechnologyName as TechnologyName] =
+                        currTechnology.techUnlocks?.map(
+                            (unlockedTechnologyName) => {
+                                const unlockedTechnology =
+                                    technologies[unlockedTechnologyName];
+
+                                return [
+                                    unlockedTechnology.column -
+                                        currTechnology.column -
+                                        1,
+                                    currTechnology.row - unlockedTechnology.row,
+                                ];
+                            },
+                        ) ?? [];
+
+                    return linksObj;
+                },
+                {} as TechTreeLinks,
+            ),
+        [technologies],
+    );
 
     useEffect(() => {
         setCheapestTechCost(
@@ -44,8 +70,8 @@ function Technology() {
     }, [technologiesUpdateWatcher]);
 
     useEffect(() => {
-        if (science >= cheapestTechCost)
-            setShouldRerenderBadges(shouldRerenderBadges + 1);
+        if (science >= cheapestTechCost && !shouldRerenderBadges)
+            setShouldRerenderBadges(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [science, cheapestTechCost]);
 
@@ -54,10 +80,11 @@ function Technology() {
             tech.status === TechnologyStatus.CanBeUnlocked &&
             science >= tech.cost
         ) {
+            setShouldRerenderBadges(false);
             buyTechnology(tech.name as TechnologyName);
             increaseScience(-tech.cost);
             tech.buildingUnlocks?.forEach((building) =>
-                unlockBuilding(building),
+                unlockBuilding(building as BuildingNames),
             );
         }
     };
@@ -67,13 +94,14 @@ function Technology() {
             Object.entries(technologies).map(([technologyName, technology]) => (
                 <TechnologyBadge
                     key={technologyName}
-                    name={technologyName}
+                    name={technologyName as TechnologyName}
                     cost={technology.cost}
                     row={technology.row}
                     column={technology.column}
                     status={technology.status}
                     unlocks={technology.buildingUnlocks}
                     onClick={() => handleTechClick(technology)}
+                    links={techTreeLinks[technologyName as TechnologyName]}
                 />
             )),
         // eslint-disable-next-line react-hooks/exhaustive-deps

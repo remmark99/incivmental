@@ -15,6 +15,9 @@ const config: Config = {
                     "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
             },
         },
+        gridTemplateRows: {
+            8: "repeat(8, minmax(0, 1fr))",
+        },
         gridTemplateColumns: {
             tech_tree: "repeat(10, 500px)",
         },

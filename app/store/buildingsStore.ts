@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
 const buildings: Buildings = {
-    farm: {
+    Farm: {
         name: "Farm",
         cost: 20,
         limit: Infinity,
         built: 0,
         buildProgress: 0,
     },
-    granary: {
+    Granary: {
         name: "Granary",
         cost: 50,
         limit: 1,
@@ -19,14 +19,14 @@ const buildings: Buildings = {
             foodProduction: 1,
         },
     },
-    mine: {
+    Mine: {
         name: "Mine",
         cost: 20,
         limit: Infinity,
         built: 0,
         buildProgress: 0,
     },
-    library: {
+    Library: {
         name: "Library",
         cost: 20,
         limit: 1,
@@ -40,7 +40,17 @@ const buildings: Buildings = {
 };
 
 const useBuildingsStore = create<BuildingsState>((set) => ({
-    unlockedBuildings: { farm: buildings.farm },
+    unlockedBuildings: { Farm: buildings.Farm },
+    currentlyConstructedBuilding: null,
+    constructionTimeout: null,
+    setCurrentlyConstructedBuilding: (currentlyConstructedBuilding) =>
+        set(() => ({ currentlyConstructedBuilding })),
+    setConstructionTimeout: (constructionTimeout) =>
+        set((state) => {
+            clearInterval(state.constructionTimeout);
+
+            return { constructionTimeout };
+        }),
     constructBuilding: (buildingName: BuildingNames) =>
         set((state) => {
             // TODO: is it bad that I modify state prop?
@@ -49,10 +59,13 @@ const useBuildingsStore = create<BuildingsState>((set) => ({
 
             if (!building) return state;
 
-            building.built = 1;
+            building.built++;
             building.buildProgress = 0;
 
-            return { unlockedBuildings } as Partial<BuildingsState>;
+            return {
+                unlockedBuildings,
+                currentlyConstructedBuilding: null,
+            } as Partial<BuildingsState>;
         }),
     unlockBuilding: (buildingName: BuildingNames) =>
         set((state) => ({
@@ -81,11 +94,3 @@ const useBuildingsStore = create<BuildingsState>((set) => ({
 }));
 
 export default useBuildingsStore;
-
-// extraReducers(builder) {
-//     builder.addCase(buyTechnology, (state, action) => {
-//         action.payload.buildingUnlocks?.forEach((building) => {
-//             state[building] = buildings[building];
-//         });
-//     });
-// }

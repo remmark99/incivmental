@@ -8,8 +8,14 @@ import useBuildingsStore from "../store/buildingsStore";
 import useResourcesStore from "../store/resourcesStore";
 
 function Buildings() {
-    const { unlockedBuildings, constructBuilding, setBuildProgress } =
-        useBuildingsStore((state) => state);
+    const {
+        unlockedBuildings,
+        currentlyConstructedBuilding,
+        setCurrentlyConstructedBuilding,
+        setConstructionTimeout,
+        constructBuilding,
+        setBuildProgress,
+    } = useBuildingsStore((state) => state);
     const production = useResourcesStore((state) => state.production);
 
     const startBuilding = (buildingName: BuildingNames, building: Building) => {
@@ -29,8 +35,12 @@ function Buildings() {
 
             setBuildProgress({ buildingName, buildProgress });
         }, 100);
+
+        setConstructionTimeout(interval);
+        setCurrentlyConstructedBuilding(buildingName);
     };
 
+    console.log(currentlyConstructedBuilding);
     return (
         <Grid container spacing={2}>
             {Object.entries(unlockedBuildings).map(
@@ -50,6 +60,9 @@ function Buildings() {
                                 )
                             }
                             max={-1}
+                            buttonDisabled={
+                                currentlyConstructedBuilding === buildingName
+                            }
                         />
                     </Grid>
                 ),
