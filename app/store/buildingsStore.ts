@@ -54,7 +54,7 @@ const useBuildingsStore = create<BuildingsState>((set) => ({
 
             return { unlockedBuildings } as Partial<BuildingsState>;
         }),
-    addBuilding: (buildingName: BuildingNames) =>
+    unlockBuilding: (buildingName: BuildingNames) =>
         set((state) => ({
             unlockedBuildings: {
                 ...state.unlockedBuildings,

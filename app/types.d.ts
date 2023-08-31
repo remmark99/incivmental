@@ -18,7 +18,7 @@ type Buildings = Partial<Record<BuildingNames, Building>>;
 type BuildingsState = {
     unlockedBuildings: Buildings;
     constructBuilding: (buildingName: BuildingNames) => void;
-    addBuilding: (buildingName: BuildingNames) => void;
+    unlockBuilding: (buildingName: BuildingNames) => void;
     setBuildProgress: ({
         buildingName,
         buildProgress,

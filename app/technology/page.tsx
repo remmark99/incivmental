@@ -5,6 +5,7 @@ import TechnologyBadge from "@/src/components/TechnologyBadge";
 import { shallow } from "zustand/shallow";
 import useResourcesStore from "../store/resourcesStore";
 import useResearchStore, { TechnologyStatus } from "../store/researchStore";
+import useBuildingsStore from "../store/buildingsStore";
 
 function Technology() {
     // TODO: adding shallow according to docs says it's deprecated
@@ -21,6 +22,7 @@ function Technology() {
         (state) => [state.science, state.increaseScience],
         shallow,
     );
+    const unlockBuilding = useBuildingsStore((state) => state.unlockBuilding);
     const [cheapestTechCost, setCheapestTechCost] = useState(0);
     const [shouldRerenderBadges, setShouldRerenderBadges] = useState(0);
 
@@ -54,6 +56,9 @@ function Technology() {
         ) {
             buyTechnology(tech.name as TechnologyName);
             increaseScience(-tech.cost);
+            tech.buildingUnlocks?.forEach((building) =>
+                unlockBuilding(building),
+            );
         }
     };
 
